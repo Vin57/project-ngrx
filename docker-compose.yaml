@@ -28,6 +28,9 @@ services:
               source: ./server/routes
               target: /express/routes
             - type: bind
+              source: ./server/rsa
+              target: /express/rsa
+            - type: bind
               source: ./server/app.js
               target: /express/app.js
         depends_on: 
