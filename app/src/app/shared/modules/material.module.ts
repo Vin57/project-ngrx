@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const MATERIALS = [
-  FlexLayoutModule,
   MatToolbarModule,
   MatButtonModule,
   MatInputModule,
@@ -19,8 +17,7 @@ const MATERIALS = [
 ];
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, ...MATERIALS],
+  imports: MATERIALS,
   exports: MATERIALS,
 })
-export class LayoutModule {}
+export class MaterialModule {}
