@@ -1,0 +1,34 @@
+<mat-toolbar>
+    <span routerLink="/">
+    <button mat-raised-button>
+      <mat-icon>home</mat-icon>
+    </button>
+  </span>
+  <span fxFlex="auto"></span>
+  <span *ngIf="!token.isAuthenticated">
+    <span>
+      <button mat-button routerLink="/signin" routerLinkActive="active">
+        Connexion
+      </button>
+    </span>
+    <span>
+      <button mat-button routerLink="/signup" routerLinkActive="active">
+        Inscription
+      </button>
+    </span>
+  </span>
+  <span *ngIf="token.isAuthenticated">
+    <span>
+      <button mat-raised-button routerLink="/profile" routerLinkActive="active">
+        Mon compte
+      </button>
+    </span>
+    <span>
+      <button mat-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </span>
+  </span>
+    
+</mat-toolbar>
