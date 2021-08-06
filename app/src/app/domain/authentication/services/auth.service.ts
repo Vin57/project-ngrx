@@ -117,6 +117,11 @@ export class AuthService {
    * @returns
    */
   isAuthenticated(): Observable<boolean> {
-    return this.token$.pipe(map((token: JwtToken) => token.isAuthenticated));
+    return this.token$.pipe(
+      map(
+        (token: JwtToken) =>
+          localStorage.getItem(JWT_LOCALE_KEY) && token.isAuthenticated
+      )
+    );
   }
 }
