@@ -16,9 +16,12 @@ router.post("/signup", (req, res) => {
 
   newUser.save((err) => {
     if (err) {
-      res.status(500).json("erreur signup !");
+      res.status(500).json({
+        status: false,
+        message: "erreur signup !",
+      });
     } else {
-      res.status(200).json("signup ok !");
+      res.status(200).json(true);
     }
   });
 });
@@ -28,7 +31,10 @@ router.post("/signin", (req, res) => {
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       res.status(200).json(signToken(user._id.toString()));
     } else {
-      res.status(401).json("signin failed !");
+      res.status(401).json({
+        status: false,
+        message: "signup failed !",
+      });
     }
   });
 });
@@ -36,11 +42,17 @@ router.post("/signin", (req, res) => {
 router.get("/refresh-token", (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
-    return res.json(403).json("no token provided");
+    return res.json(403).json({
+      status: false,
+      message: "no token provided",
+    });
   }
   jwt.verify(token, RSA_KEY_PUBLIC, (err, decoded) => {
     if (err) {
-      return res.json(403).json("invalid token");
+      return res.json(403).json({
+        status: false,
+        message: "invalid token",
+      });
     }
     const decoded_subject = decoded.sub;
     res.status(200).json(signToken(decoded_subject.toString()));

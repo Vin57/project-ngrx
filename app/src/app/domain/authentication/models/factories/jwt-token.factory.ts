@@ -1,12 +1,9 @@
 import { JwtToken } from '../class/jwt-token.model';
 
 export class JWTTokenFactory {
-  static build(
-    isAuthenticated: boolean = false,
-    token: string = null
-  ): JwtToken {
+  static build(token: string = null): JwtToken {
     return {
-      isAuthenticated: isAuthenticated,
+      isAuthenticated: token != null,
       token: token,
     };
   }

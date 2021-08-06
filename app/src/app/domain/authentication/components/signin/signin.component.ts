@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { AuthenticationSigninAction } from '../../store/authentication.actions';
 
 @Component({
   selector: 'app-signin',
@@ -17,7 +19,8 @@ export class SigninComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -32,16 +35,18 @@ export class SigninComponent implements OnInit, OnDestroy {
   }
 
   public submit(): void {
-    this.subscription.add(
-      this.authService.signin(this.form.value).subscribe(
-        () => {
-          this.router.navigate(['/']);
-        },
-        (err) => {
-          this.error = 'Une erreur est survenue, veuillez rééssayer';
-          console.log(err);
-        }
-      )
-    );
+    this.store.dispatch(new AuthenticationSigninAction({ ...this.form.value }));
+
+    // this.subscription.add(
+    //   this.authService.signin(this.form.value).subscribe(
+    //     () => {
+    //       this.router.navigate(['/']);
+    //     },
+    //     (err) => {
+    //       this.error = 'Une erreur est survenue, veuillez rééssayer';
+    //       console.log(err);
+    //     }
+    //   )
+    // );
   }
 }
