@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AuthenticationFetchCurrentUser } from 'src/app/domain/authentication/store/authentication.actions';
-import { UserService } from 'src/app/domain/user/services/user.service';
 import { IUser } from 'src/app/shared/models/user.model';
 import { authCurrentUserSelector } from 'src/app/shared/store/selector';
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { empty, Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import { IUser } from 'src/app/shared/models/user.model';
 import { UserService } from '../../user/services/user.service';
@@ -59,6 +59,7 @@ export class AuthenticationEffects {
       )
     )
   );
+
   public authenticationSigninSuccess$: Observable<Action> = createEffect(
     () =>
       this.actions$.pipe(

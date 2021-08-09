@@ -15,8 +15,8 @@ export interface AuthenticationState {
   error: any;
 }
 
-const initialState: AuthenticationState = {
-  jwtToken: null,
+export const initialState: AuthenticationState = {
+  jwtToken: JWTTokenFactory.build(),
   currentUser: null,
   loaded: false,
   loading: false,

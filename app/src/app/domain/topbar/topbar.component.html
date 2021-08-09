@@ -5,6 +5,17 @@
     </button>
   </span>
   <span fxFlex="auto"></span>
+  <form [formGroup]="form">
+    <mat-form-field floatLabel="never">
+      <input
+        matInput
+        type="search"
+        formControlName="search"
+        placeholder="Rechercher"
+        (keyup)="applySearch()"
+      />
+    </mat-form-field>
+  </form>
   <span *ngIf="!jwtToken.isAuthenticated">
     <span>
       <button mat-button routerLink="/signin" routerLinkActive="active">

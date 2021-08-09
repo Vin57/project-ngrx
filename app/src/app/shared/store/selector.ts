@@ -27,3 +27,8 @@ export const authCurrentUserSelector = createSelector(
   authSelector,
   (authState: AuthenticationState) => authState.currentUser
 );
+
+export const authErrorSelector = createSelector(
+  authSelector,
+  (authState: AuthenticationState) => authState.error
+);
