@@ -15,6 +15,9 @@ export enum AuthenticationActionEnum {
   AUTHENTICATION_LOGOUT = '[authentication] logout',
   // REFRESH TOKEN
   AUTHENTICATION_REFRESH_TOKEN = '[authentication] refresh token',
+  // CURRENT USER
+  AUTHENTICATION_FETCH_CURRENT_USER = '[authentication] fetch current user',
+  AUTHENTICATION_SET_CURRENT_USER = '[authentication] set current user',
 }
 
 /*********************************
@@ -98,6 +101,23 @@ export class AuthenticationRefreshToken implements Action {
   constructor(public payload?: any) {}
 }
 
+/*********************************
+ * AUTHENTICATION_FETCH_CURRENT_USER
+ *********************************/
+export class AuthenticationFetchCurrentUser implements Action {
+  readonly type: string =
+    AuthenticationActionEnum.AUTHENTICATION_FETCH_CURRENT_USER;
+
+  constructor(public payload?: any) {}
+}
+
+export class AuthenticationSetCurrentUser implements Action {
+  readonly type: string =
+    AuthenticationActionEnum.AUTHENTICATION_SET_CURRENT_USER;
+
+  constructor(public payload?: any) {}
+}
+
 export type AuthenticationSigninActions =
   | AuthenticationSignin
   | AuthenticationSigninSuccess
@@ -107,7 +127,12 @@ export type AuthenticationSignupActions =
   | AuthenticationSignupSuccess
   | AuthenticationSignupError;
 
+export type AuthenticationCurrentUser =
+  | AuthenticationFetchCurrentUser
+  | AuthenticationSetCurrentUser;
+
 export type AuthenticationActions =
   | AuthenticationSigninActions
   | AuthenticationSignupActions
-  | AuthenticationLogout;
+  | AuthenticationLogout
+  | AuthenticationCurrentUser;

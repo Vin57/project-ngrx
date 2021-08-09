@@ -2,7 +2,7 @@
   <mat-card>
     <mat-card-title>Mon compte</mat-card-title>
     <mat-card-content
-      *ngIf="currentUser | async; let user"
+      *ngIf="currentUser$ | async; let user"
       fxLayout="column"
       fxLayoutGap="15"
     >

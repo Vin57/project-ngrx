@@ -20,5 +20,10 @@ export const authSelector = createFeatureSelector<AuthenticationState>(
 
 export const authTokenSelector = createSelector(
   authSelector,
-  (authState: AuthenticationState) => authState.datas
+  (authState: AuthenticationState) => authState.jwtToken
+);
+
+export const authCurrentUserSelector = createSelector(
+  authSelector,
+  (authState: AuthenticationState) => authState.currentUser
 );

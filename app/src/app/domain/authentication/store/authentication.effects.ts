@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { Observable, of, Subscription } from 'rxjs';
+import { empty, Observable, of, Subscription } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import { IUser } from 'src/app/shared/models/user.model';
+import { UserService } from '../../user/services/user.service';
 import { AuthService, JWT_LOCALE_KEY } from '../services/auth.service';
 import {
   AuthenticationActionEnum,
+  AuthenticationFetchCurrentUser,
   AuthenticationLogout,
+  AuthenticationSetCurrentUser,
   AuthenticationSignin,
   AuthenticationSigninError,
   AuthenticationSigninSuccess,
@@ -55,6 +59,16 @@ export class AuthenticationEffects {
       )
     )
   );
+  public authenticationSigninSuccess$: Observable<Action> = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType<AuthenticationSigninSuccess>(
+          AuthenticationActionEnum.AUTHENTICATION_SIGNIN_SUCCESS
+        ),
+        tap(() => this.router.navigate(['/']))
+      ),
+    { dispatch: false }
+  );
 
   public authenticationSignup$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
@@ -69,6 +83,17 @@ export class AuthenticationEffects {
         )
       )
     )
+  );
+
+  public authenticationSignupSuccess$: Observable<Action> = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType<AuthenticationSignupSuccess>(
+          AuthenticationActionEnum.AUTHENTICATION_SIGNUP_SUCCESS
+        ),
+        tap(() => this.router.navigate(['/signin']))
+      ),
+    { dispatch: false }
   );
 
   public tryRefreshToken$ = createEffect(() =>
@@ -91,10 +116,34 @@ export class AuthenticationEffects {
         ofType<AuthenticationLogout>(
           AuthenticationActionEnum.AUTHENTICATION_LOGOUT
         ),
-        tap(() => this.subscriptionRefreshToken.unsubscribe())
+        tap(() => {
+          if (this.subscriptionRefreshToken) {
+            this.subscriptionRefreshToken.unsubscribe();
+          }
+        })
       ),
     { dispatch: false }
   );
 
-  constructor(private actions$: Actions, private authService: AuthService) {}
+  public authenticationFetchCurrentUser$: Observable<Action> = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType<AuthenticationFetchCurrentUser>(
+          AuthenticationActionEnum.AUTHENTICATION_FETCH_CURRENT_USER
+        ),
+        switchMap(() => this.userService.getCurrentUser()),
+        map((user: IUser) => new AuthenticationSetCurrentUser(user)),
+        catchError((err: any) => {
+          console.log('Error in fetch current user', err);
+          return of(null);
+        })
+      )
+  );
+
+  constructor(
+    private actions$: Actions,
+    private authService: AuthService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 }

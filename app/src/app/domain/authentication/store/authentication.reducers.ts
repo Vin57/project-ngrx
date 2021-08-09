@@ -1,3 +1,4 @@
+import { IUser } from 'src/app/shared/models/user.model';
 import { JwtToken } from '../models/class/jwt-token.model';
 import { JWTTokenFactory } from '../models/factories/jwt-token.factory';
 import { JWT_LOCALE_KEY } from '../services/auth.service';
@@ -7,14 +8,16 @@ import {
 } from './authentication.actions';
 
 export interface AuthenticationState {
-  datas: JwtToken;
+  jwtToken: JwtToken;
+  currentUser: IUser;
   loaded: boolean;
   loading: boolean;
   error: any;
 }
 
 const initialState: AuthenticationState = {
-  datas: null,
+  jwtToken: null,
+  currentUser: null,
   loaded: false,
   loading: false,
   error: null,
@@ -37,7 +40,7 @@ export function AuthenticationReducer(
         ...state,
         loaded: true,
         loading: false,
-        datas: JWTTokenFactory.build(action.payload),
+        jwtToken: JWTTokenFactory.build(action.payload),
         error: null,
       };
       break;
@@ -47,7 +50,7 @@ export function AuthenticationReducer(
         ...state,
         loaded: false,
         loading: false,
-        datas: JWTTokenFactory.build(),
+        jwtToken: JWTTokenFactory.build(),
         error: action.payload,
       };
       break;
@@ -64,7 +67,7 @@ export function AuthenticationReducer(
         ...state,
         loaded: true,
         loading: false,
-        datas: JWTTokenFactory.build(action.payload),
+        jwtToken: JWTTokenFactory.build(action.payload),
         error: null,
       };
       break;
@@ -74,7 +77,7 @@ export function AuthenticationReducer(
         ...state,
         loaded: false,
         loading: false,
-        datas: JWTTokenFactory.build(),
+        jwtToken: JWTTokenFactory.build(),
         error: action.payload,
       };
 
@@ -85,7 +88,17 @@ export function AuthenticationReducer(
         ...state,
         loaded: true,
         loading: false,
-        datas: JWTTokenFactory.build(),
+        jwtToken: JWTTokenFactory.build(),
+        error: null,
+      };
+      break;
+    }
+    case AuthenticationActionEnum.AUTHENTICATION_SET_CURRENT_USER: {
+      state = {
+        ...state,
+        loaded: true,
+        loading: false,
+        currentUser: action.payload,
         error: null,
       };
       break;
@@ -93,11 +106,11 @@ export function AuthenticationReducer(
     default:
       state = {
         ...state,
-        datas: JWTTokenFactory.build(localStorage.getItem(JWT_LOCALE_KEY)),
+        jwtToken: JWTTokenFactory.build(localStorage.getItem(JWT_LOCALE_KEY)),
       };
   }
-  if (state.datas && state.datas.token) {
-    localStorage.setItem(JWT_LOCALE_KEY, state.datas.token);
+  if (state.jwtToken && state.jwtToken.token) {
+    localStorage.setItem(JWT_LOCALE_KEY, state.jwtToken.token);
   } else {
     localStorage.removeItem(JWT_LOCALE_KEY);
   }
