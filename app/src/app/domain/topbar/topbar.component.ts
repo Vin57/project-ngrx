@@ -31,8 +31,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
       search: [],
     });
     this.store.pipe(select(authTokenSelector)).subscribe((token: JwtToken) => {
-      console.log(token);
-
       this.jwtToken = token;
     });
   }

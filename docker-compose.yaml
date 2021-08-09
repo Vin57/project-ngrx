@@ -7,10 +7,14 @@ services:
         ports: 
             - 4200:4200
             - 49153:49153
+            - 8080:8080
         volumes:
             - type: bind
               source: ./app/src
               target: /usr/app/src
+            - type: bind
+              source: ./public
+              target: /usr/app/public
     express:
         build:
             context: ./server

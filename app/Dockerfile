@@ -11,3 +11,5 @@ EXPOSE 4200 49153
 COPY . .
 
 CMD [ "npm", "start"]
+
+EXPOSE 4200 49153
