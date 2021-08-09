@@ -5,7 +5,7 @@
     </button>
   </span>
   <span fxFlex="auto"></span>
-  <span *ngIf="!token.isAuthenticated">
+  <span *ngIf="!jwtToken.isAuthenticated">
     <span>
       <button mat-button routerLink="/signin" routerLinkActive="active">
         Connexion
@@ -17,7 +17,7 @@
       </button>
     </span>
   </span>
-  <span *ngIf="token.isAuthenticated">
+  <span *ngIf="jwtToken.isAuthenticated">
     <span>
       <button mat-raised-button routerLink="/profile" routerLinkActive="active">
         Mon compte

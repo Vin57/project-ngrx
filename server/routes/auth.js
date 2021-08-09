@@ -67,7 +67,7 @@ router.get("/refresh-token", (req, res) => {
  * time should be something like 15 minutes
  * @returns
  */
-function signToken(p_bsubject, p_expiresIn = "15s") {
+function signToken(p_bsubject, p_expiresIn = 15000) {
   return jwt.sign({}, RSA_KEY_PRIVATE, {
     algorithm: "RS256",
     expiresIn: p_expiresIn,

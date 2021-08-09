@@ -26,61 +26,81 @@ export function AuthenticationReducer(
 ) {
   switch (action.type) {
     case AuthenticationActionEnum.AUTHENTICATION_SIGNIN: {
-      return {
+      state = {
         ...state,
         loading: true,
       };
+      break;
     }
     case AuthenticationActionEnum.AUTHENTICATION_SIGNIN_SUCCESS: {
-      return {
+      state = {
         ...state,
         loaded: true,
         loading: false,
         datas: JWTTokenFactory.build(action.payload),
         error: null,
       };
+      break;
     }
     case AuthenticationActionEnum.AUTHENTICATION_SIGNIN_ERROR: {
-      return {
+      state = {
         ...state,
         loaded: false,
         loading: false,
         datas: JWTTokenFactory.build(),
         error: action.payload,
       };
+      break;
     }
     case AuthenticationActionEnum.AUTHENTICATION_SIGNUP: {
-      return {
+      state = {
         ...state,
         loading: true,
       };
+      break;
     }
     case AuthenticationActionEnum.AUTHENTICATION_SIGNUP_SUCCESS: {
-      return {
+      state = {
         ...state,
         loaded: true,
         loading: false,
         datas: JWTTokenFactory.build(action.payload),
         error: null,
       };
+      break;
     }
     case AuthenticationActionEnum.AUTHENTICATION_SIGNUP_ERROR: {
-      return {
+      state = {
         ...state,
         loaded: false,
         loading: false,
         datas: JWTTokenFactory.build(),
         error: action.payload,
       };
+
+      break;
     }
-    case AuthenticationActionEnum.AUTHENTICATION_LOGOUT_ACTION: {
-      return {
+    case AuthenticationActionEnum.AUTHENTICATION_LOGOUT: {
+      state = {
         ...state,
         loaded: true,
         loading: false,
         datas: JWTTokenFactory.build(),
         error: null,
       };
+      break;
     }
+    default:
+      state = {
+        ...state,
+        datas: JWTTokenFactory.build(localStorage.getItem(JWT_LOCALE_KEY)),
+      };
   }
+  if (state.datas && state.datas.token) {
+    localStorage.setItem(JWT_LOCALE_KEY, state.datas.token);
+  } else {
+    localStorage.removeItem(JWT_LOCALE_KEY);
+  }
+
+  return state;
 }

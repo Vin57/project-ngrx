@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import { IUser } from 'src/app/shared/models/user.model';
 import { AuthService, JWT_LOCALE_KEY } from '../services/auth.service';
 import {
   AuthenticationActionEnum,
+  AuthenticationLogout,
   AuthenticationSignin,
   AuthenticationSigninError,
   AuthenticationSigninSuccess,
   AuthenticationSignup,
-  AuthenticationSignupActions,
   AuthenticationSignupError,
   AuthenticationSignupSuccess,
 } from './authentication.actions';
@@ -21,6 +21,21 @@ import { Credential } from './models/credential.model';
   providedIn: 'root',
 })
 export class AuthenticationEffects {
+  private subscriptionRefreshToken: Subscription;
+
+  public storeInit$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType<AuthenticationSignin>('@ngrx/store/init'),
+      tap(() => {
+        if (localStorage.getItem(JWT_LOCALE_KEY) != null) {
+          this.subscriptionRefreshToken = this.authService
+            .initTimer()
+            .subscribe();
+        }
+      })
+    )
+  );
+
   public authenticationSigninEffect$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType<AuthenticationSignin>(
@@ -30,6 +45,11 @@ export class AuthenticationEffects {
       exhaustMap((credentials: Credential) =>
         this.authService.signin(credentials).pipe(
           map((token: string) => new AuthenticationSigninSuccess(token)),
+          tap((token) => {
+            this.subscriptionRefreshToken = this.authService
+              .initTimer()
+              .subscribe();
+          }),
           catchError((error: any) => of(new AuthenticationSigninError(error)))
         )
       )
@@ -48,7 +68,32 @@ export class AuthenticationEffects {
           catchError((error: any) => of(new AuthenticationSignupError(error)))
         )
       )
-    );
+    )
+  );
+
+  public tryRefreshToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActionEnum.AUTHENTICATION_REFRESH_TOKEN),
+      switchMap(() =>
+        this.authService.refreshToken().pipe(
+          map((token) => {
+            return new AuthenticationSigninSuccess(token);
+          }),
+          catchError(() => of(new AuthenticationSigninError()))
+        )
+      )
+    )
+  );
+
+  public logout$: Observable<Action> = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType<AuthenticationLogout>(
+          AuthenticationActionEnum.AUTHENTICATION_LOGOUT
+        ),
+        tap(() => this.subscriptionRefreshToken.unsubscribe())
+      ),
+    { dispatch: false }
   );
 
   constructor(private actions$: Actions, private authService: AuthService) {}

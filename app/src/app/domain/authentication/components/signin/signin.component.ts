@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
-import { AuthenticationSigninAction } from '../../store/authentication.actions';
+import { AuthenticationSignin } from '../../store/authentication.actions';
 
 @Component({
   selector: 'app-signin',
@@ -16,12 +14,7 @@ export class SigninComponent implements OnInit, OnDestroy {
   public error: string;
   public subscription: Subscription = new Subscription();
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private store: Store
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -35,7 +28,7 @@ export class SigninComponent implements OnInit, OnDestroy {
   }
 
   public submit(): void {
-    this.store.dispatch(new AuthenticationSigninAction({ ...this.form.value }));
+    this.store.dispatch(new AuthenticationSignin({ ...this.form.value }));
 
     // this.subscription.add(
     //   this.authService.signin(this.form.value).subscribe(

@@ -12,7 +12,9 @@ export enum AuthenticationActionEnum {
   AUTHENTICATION_SIGNUP_SUCCESS = '[authentication] signup success',
   AUTHENTICATION_SIGNUP_ERROR = '[authentication] signup error',
   // LOGOUT
-  AUTHENTICATION_LOGOUT_ACTION = '[authentication] logout',
+  AUTHENTICATION_LOGOUT = '[authentication] logout',
+  // REFRESH TOKEN
+  AUTHENTICATION_REFRESH_TOKEN = '[authentication] refresh token',
 }
 
 /*********************************
@@ -44,7 +46,7 @@ export class AuthenticationSigninError implements Action {
   /**
    * @param payload Any error which has occured.
    */
-  constructor(public payload: any) {}
+  constructor(public payload?: any) {}
 }
 
 /*********************************
@@ -76,8 +78,22 @@ export class AuthenticationSignupError implements Action {
   constructor(public payload: any) {}
 }
 
+/*********************************
+ * AUTHENTICATION_LOGOUT
+ *********************************/
+
 export class AuthenticationLogout implements Action {
-  readonly type: string = AuthenticationActionEnum.AUTHENTICATION_LOGOUT_ACTION;
+  readonly type: string = AuthenticationActionEnum.AUTHENTICATION_LOGOUT;
+
+  constructor(public payload?: any) {}
+}
+
+/*********************************
+ * AUTHENTICATION_REFRESH_TOKEN
+ *********************************/
+
+export class AuthenticationRefreshToken implements Action {
+  readonly type: string = AuthenticationActionEnum.AUTHENTICATION_REFRESH_TOKEN;
 
   constructor(public payload?: any) {}
 }
