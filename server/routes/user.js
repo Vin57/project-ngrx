@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const RSA_KEY_PUBLIC = fs.readFileSync("./rsa/key.pub");
+const RSA_KEY_PUBLIC = fs.readFileSync("./secrets/rsa/key.pub");
 
 function isLoggedIn(req, res, next) {
   const jwtToken = req.headers.authorization;

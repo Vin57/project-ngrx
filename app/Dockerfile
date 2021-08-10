@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install && npm i -g web-push
 
 EXPOSE 4200 49153
 
@@ -12,4 +12,4 @@ COPY . .
 
 CMD [ "npm", "start"]
 
-EXPOSE 4200 49153
+EXPOSE 4200 49153 8080

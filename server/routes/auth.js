@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const RSA_KEY_PRIVATE = fs.readFileSync("./rsa/key");
-const RSA_KEY_PUBLIC = fs.readFileSync("./rsa/key.pub");
+const RSA_KEY_PRIVATE = fs.readFileSync("./secrets/rsa/key");
+const RSA_KEY_PUBLIC = fs.readFileSync("./secrets/rsa/key.pub");
 
 router.post("/signup", (req, res) => {
   const newUser = new User({
