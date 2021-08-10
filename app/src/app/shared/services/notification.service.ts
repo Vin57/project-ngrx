@@ -10,17 +10,18 @@ import { API_URL } from '../consts/api.consts';
 })
 export class NotificationService {
   readonly publicKey =
-    'BL1VibTJ3jx82ElmRK1azc8qC--uE4vNXIzZPqyMbxWHguElVaP-QsW5gwrHR3YgRtDAUNUeNi3lJawTZdOBu5Y';
-  private subscription: Subscription;
+    'BGwKBg8cu8LJvmQiI4OnETTGqjtajhQiKUQBbazYPGjUX0oFbDsn0bKVLEcpLrBn8t7DsfnFh6tAgGtfFqyFQbQ';
+  private offerNotificationSubscription: Subscription;
+  private sendSampleNotificationSubscription: Subscription;
 
   constructor(private swPush: SwPush, private http: HttpClient) {}
 
   public offerNotifications() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.offerNotificationSubscription) {
+      this.offerNotificationSubscription.unsubscribe();
     }
 
-    this.subscription = from(
+    this.offerNotificationSubscription = from(
       this.swPush.requestSubscription({
         serverPublicKey: this.publicKey,
       })
@@ -35,6 +36,15 @@ export class NotificationService {
           return of(null);
         })
       )
+      .subscribe();
+  }
+
+  public sendSampleNotification() {
+    if (this.sendSampleNotificationSubscription) {
+      this.sendSampleNotificationSubscription.unsubscribe();
+    }
+    this.sendSampleNotificationSubscription = this.http
+      .get(`${API_URL}/notifications/test`)
       .subscribe();
   }
 }

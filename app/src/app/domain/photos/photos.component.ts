@@ -13,9 +13,16 @@ import { photosPictureSelector } from './store/photos.selectors';
 })
 export class PhotosComponent implements OnInit {
   public photos$: Observable<IPhoto[]>;
-  constructor(private store: Store, private notif: NotificationService) {}
+  constructor(
+    private store: Store,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.photos$ = this.store.pipe(select(photosPictureSelector));
+  }
+
+  sendSampleNotification() {
+    this.notificationService.sendSampleNotification();
   }
 }

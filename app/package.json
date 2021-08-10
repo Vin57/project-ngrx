@@ -33,6 +33,7 @@
     "server": "^1.0.34",
     "tslib": "^2.2.0",
     "unsplash-js": "^7.0.15",
+    "web-push": "^3.4.5",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
